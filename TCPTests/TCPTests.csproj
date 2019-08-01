@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\NUnit.3.11.0\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.11.0\build\NUnit.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AFDAE304-BC24-489B-BF76-43374610B3E3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TCPTests</RootNamespace>
+    <AssemblyName>TCPTests</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.11.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.11.0\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GameEndTests.cs" />
+    <Compile Include="EnvironmentSetupTests.cs" />
+    <Compile Include="ConnectionProblemsTests.cs" />
+    <Compile Include="ExchangeInfoTests.cs" />
+    <Compile Include="SerializationTests\ActionTests\RequestTests\DestroyPieceRequestTests.cs" />
+    <Compile Include="SerializationTests\ActionTests\RequestTests\DiscoveryRequestTests.cs" />
+    <Compile Include="SerializationTests\ActionTests\RequestTests\ExchangeInfosAskingTests.cs" />
+    <Compile Include="SerializationTests\ActionTests\RequestTests\ExchangeInfosRequestTests.cs" />
+    <Compile Include="SerializationTests\ActionTests\RequestTests\MoveRequestTests.cs" />
+    <Compile Include="SerializationTests\ActionTests\RequestTests\PickUpRequestTests.cs" />
+    <Compile Include="SerializationTests\ActionTests\RequestTests\PutPieceRequestTests.cs" />
+    <Compile Include="SerializationTests\ActionTests\RequestTests\TestPieceRequestTests.cs" />
+    <Compile Include="SerializationTests\ActionTests\ResultTests\DestroyPieceResultTests.cs" />
+    <Compile Include="SerializationTests\ActionTests\ResultTests\DiscoveryResultTests.cs" />
+    <Compile Include="SerializationTests\ActionTests\ResultTests\ExchangeInfosDataResultTests.cs" />
+    <Compile Include="SerializationTests\ActionTests\ResultTests\MoveResultTests.cs" />
+    <Compile Include="SerializationTests\ActionTests\ResultTests\PickUpResultTests.cs" />
+    <Compile Include="SerializationTests\ActionTests\ResultTests\PutPieceResultTests.cs" />
+    <Compile Include="SerializationTests\ActionTests\ResultTests\TestPieceResultTests.cs" />
+    <Compile Include="SerializationTests\ErrorCasesTests\ErrorCases.cs" />
+    <Compile Include="SerializationTests\ErrorTests\AgentNotRespondingTests.cs" />
+    <Compile Include="SerializationTests\ErrorTests\CannotMoveThereTests.cs" />
+    <Compile Include="SerializationTests\ErrorTests\GmNotRespondingTests.cs" />
+    <Compile Include="SerializationTests\ErrorTests\InvalidActionTests.cs" />
+    <Compile Include="SerializationTests\ErrorTests\InvalidJsonTests.cs" />
+    <Compile Include="SerializationTests\ErrorTests\OutsideErrorHierarchyTests\GmNotConnectedTests.cs" />
+    <Compile Include="SerializationTests\ErrorTests\OutsideErrorHierarchyTests\WybranoCalyPrzedzialDlaPsaTests.cs" />
+    <Compile Include="SerializationTests\ErrorTests\RequestDuringPenaltyTests.cs" />
+    <Compile Include="SerializationTests\ExchangeInfosResponseTests.cs" />
+    <Compile Include="SerializationTests\InfoTests\GameEndedTests.cs" />
+    <Compile Include="SerializationTests\InfoTests\GameInfoTests.cs" />
+    <Compile Include="SerializationTests\SetupTests\AcceptedGmTests.cs" />
+    <Compile Include="SerializationTests\SetupTests\AcceptedToGameTests.cs" />
+    <Compile Include="SerializationTests\SetupTests\ConnectGmTests.cs" />
+    <Compile Include="SerializationTests\SetupTests\ConnectToGameTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Environment.cs" />
+    <Compile Include="AgentActionsTests.cs" />
+    <Compile Include="TestsBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GameLibrary\GameLibrary.csproj">
+      <Project>{9fe65730-a37d-4872-ad7d-5cd80da8a0a3}</Project>
+      <Name>GameLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Server\Server.csproj">
+      <Project>{75a45619-6b8c-4ebe-86e6-e7aabdcfbf9d}</Project>
+      <Name>Server</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Game\Game.csproj">
+      <Project>{b9c680bd-5642-42ab-94a2-cf7c7e665a91}</Project>
+      <Name>Game</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Player\Player.csproj">
+      <Project>{6603780d-e6c8-4f48-9bb3-118bed1a1cd2}</Project>
+      <Name>Player</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\NUnit.3.11.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.11.0\build\NUnit.props'))" />
+  </Target>
+</Project>

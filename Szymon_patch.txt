@@ -1,0 +1,318 @@
+diff --git a/Game/Map.cs b/Game/Map.cs
+index 3d0b5c8..7d406f9 100644
+--- a/Game/Map.cs
++++ b/Game/Map.cs
+@@ -47,15 +47,15 @@ namespace Game
+                 {
+                     tile.UpdateTile(DateTime.Now, type: TileType.NoGoal);
+                     Logger.Debug($"Setting red-side non-goal on position ({tile.X}, {tile.Y})");
+-                    this[tile.X, Height - 1 - tile.Y].UpdateTile(DateTime.Now, type: TileType.NoGoal);
+-                    Logger.Debug($"Setting blue-side non-goal on position ({tile.X}, {Height - 1 - tile.Y})");
++                    this[Width - 1 - tile.X, Height - 1 - tile.Y].UpdateTile(DateTime.Now, type: TileType.NoGoal);
++                    Logger.Debug($"Setting blue-side non-goal on position ({Width - 1 - tile.X}, {Height - 1 - tile.Y})");
+                 },
+                 tile =>
+                 {
+                     tile.UpdateTile(DateTime.Now, type: TileType.Goal);
+                     Logger.Debug($"Setting red-side goal on position ({tile.X}, {tile.Y})");
+-                    this[tile.X, Height - 1 - tile.Y].UpdateTile(DateTime.Now, type: TileType.Goal);
+-                    Logger.Debug($"Setting blue-side goal on position ({tile.X}, {Height - 1 - tile.Y})");
++                    this[Width - 1 - tile.X, Height - 1 - tile.Y].UpdateTile(DateTime.Now, type: TileType.Goal);
++                    Logger.Debug($"Setting blue-side goal on position ({Width - 1 - tile.X}, {Height - 1 - tile.Y})");
+                 }).ToList();
+         }
+ 
+diff --git a/GameLibrary/Strategies/DiscovererStrategy.cs b/GameLibrary/Strategies/DiscovererStrategy.cs
+index 35b1b00..5941d2d 100644
+--- a/GameLibrary/Strategies/DiscovererStrategy.cs
++++ b/GameLibrary/Strategies/DiscovererStrategy.cs
+@@ -8,15 +8,15 @@ namespace GameLibrary.Strategies
+     {
+         public DiscovererStrategy(Team team, int mapHeight, int mapWidth, int mapGoalAreaHeight, int[] agentsIdFromTeam, int leaderId) : base(team, mapHeight, mapWidth, mapGoalAreaHeight, agentsIdFromTeam, leaderId) { }
+ 
+-        public override Actions UseStrategy(ITile Position, int DistanceToPiece)
++        public override Actions UseStrategy(ITile position, int distanceToPiece)
+         {
+             if (Piece == PieceStatus.Unidentified)
+                 return Actions.TestPiece;
+             else if (Piece == PieceStatus.Sham)
+                 return Actions.DestroyPiece;
+-            else if (Piece == PieceStatus.None && DistanceToPiece == 0)
++            else if (Piece == PieceStatus.None && distanceToPiece == 0)
+                 return Actions.PickPiece;
+-            else if (Piece == PieceStatus.None && CouldntMove < 5 && ((Team == Team.Red && Position.Y < MapGoalAreaHeight) || (Team == Team.Blue && Position.Y >= (MapHeight - MapGoalAreaHeight))))
++            else if (Piece == PieceStatus.None && CouldntMove < 5 && ((Team == Team.Red && position.Y < MapGoalAreaHeight) || (Team == Team.Blue && position.Y >= (MapHeight - MapGoalAreaHeight))))
+             {
+                 if (Team == Team.Red)
+                 {
+@@ -31,16 +31,16 @@ namespace GameLibrary.Strategies
+             {
+                 return Actions.Discovery;
+             }
+-            else if (Position.X == GoingToX && Position.Y == GoingToY)
++            else if (position.X == GoingToX && position.Y == GoingToY)
+             {
+                 GoingToX = GoingToY = -1;
+                 return Actions.PutPiece;
+             }
+             else if (Piece == PieceStatus.Real)
+             {
+-                return GoToDestination(Position, GoingToX, GoingToY);
++                return GoToDestination(position, GoingToX, GoingToY);
+             }
+-            return RandomAction(Position);
++            return RandomAction(position);
+         }
+     }
+ }
+diff --git a/GameLibrary/Strategies/ExchangeStrategy.cs b/GameLibrary/Strategies/ExchangeStrategy.cs
+index 3f277d1..552f9d5 100644
+--- a/GameLibrary/Strategies/ExchangeStrategy.cs
++++ b/GameLibrary/Strategies/ExchangeStrategy.cs
+@@ -13,7 +13,7 @@ namespace GameLibrary.Strategies
+     {
+         public ExchangeStrategy(Team team, int mapHeight, int mapWidth, int mapGoalAreaHeight, int[] agentsIdFromTeam, int leaderId) : base(team, mapHeight, mapWidth, mapGoalAreaHeight, agentsIdFromTeam, leaderId) { }
+ 
+-        public override Actions UseStrategy(ITile Position, int DistanceToPiece)
++        public override Actions UseStrategy(ITile position, int distanceToPiece)
+         {
+             if (AgentsIdFromTeam.Length > 0 && !WaitingForExchangeAnswer)
+                 return Actions.InfoExchange;
+diff --git a/GameLibrary/Strategies/NormalStrategy.cs b/GameLibrary/Strategies/NormalStrategy.cs
+index 42d0a92..5ec77e4 100644
+--- a/GameLibrary/Strategies/NormalStrategy.cs
++++ b/GameLibrary/Strategies/NormalStrategy.cs
+@@ -21,15 +21,15 @@ namespace GameLibrary.Strategies
+             DonePutPieceActions = 0;
+         }
+ 
+-        public override Actions UseStrategy(ITile Position, int DistanceToPiece)
++        public override Actions UseStrategy(ITile position, int distanceToPiece)
+         {
+             if (Piece == PieceStatus.Unidentified)
+                 return Actions.TestPiece;
+             else if (Piece == PieceStatus.Sham)
+                 return Actions.DestroyPiece;
+-            else if (Piece == PieceStatus.None && DistanceToPiece == 0)
++            else if (Piece == PieceStatus.None && distanceToPiece == 0)
+                 return Actions.PickPiece;
+-            else if (Piece == PieceStatus.None && CouldntMove < 5 && ((Team == Team.Red && Position.Y < MapGoalAreaHeight) || (Team == Team.Blue && Position.Y >= (MapHeight - MapGoalAreaHeight))))
++            else if (Piece == PieceStatus.None && CouldntMove < 5 && ((Team == Team.Red && position.Y < MapGoalAreaHeight) || (Team == Team.Blue && position.Y >= (MapHeight - MapGoalAreaHeight))))
+             {
+                 if (Team == Team.Red)
+                 {
+@@ -40,24 +40,24 @@ namespace GameLibrary.Strategies
+                     return Actions.MoveDown;
+                 }
+             }
+-            else if (Position.X == GoingToX && Position.Y == GoingToY)
++            else if (position.X == GoingToX && position.Y == GoingToY)
+             {
+                 GoingToX = GoingToY = -1;
+                 return Actions.PutPiece;
+             }
+             else if (Piece == PieceStatus.Real)
+             {
+-                return GoToDestination(Position, GoingToX, GoingToY);
++                return GoToDestination(position, GoingToX, GoingToY);
+             }
+-            return RandomAction(Position);
++            return RandomAction(position);
+         }
+         
+-        public Actions GoToDestination(ITile Position, int DestinationX, int DestinationY)
++        public Actions GoToDestination(ITile position, int destinationX, int destinationY)
+         {
+             Random rand = new Random();
+-            if (DestinationY > Position.Y && CouldntMove < 5)
++            if (destinationY > position.Y && CouldntMove < 5)
+             {
+-                if (DestinationX > Position.X)
++                if (destinationX > position.X)
+                 {
+                     switch(rand.Next(2))
+                     {
+@@ -67,7 +67,7 @@ namespace GameLibrary.Strategies
+                             return Actions.MoveRight;
+                     }
+                 }
+-                if (DestinationX < Position.X)
++                if (destinationX < position.X)
+                 {
+                     switch (rand.Next(2))
+                     {
+@@ -79,9 +79,9 @@ namespace GameLibrary.Strategies
+                 }
+                 return Actions.MoveUp;
+             }
+-            if (DestinationY < Position.Y && CouldntMove < 5)
++            if (destinationY < position.Y && CouldntMove < 5)
+             {
+-                if (DestinationX > Position.X)
++                if (destinationX > position.X)
+                 {
+                     switch (rand.Next(2))
+                     {
+@@ -91,7 +91,7 @@ namespace GameLibrary.Strategies
+                             return Actions.MoveRight;
+                     }
+                 }
+-                if (DestinationX < Position.X)
++                if (destinationX < position.X)
+                 {
+                     switch (rand.Next(2))
+                     {
+@@ -103,14 +103,14 @@ namespace GameLibrary.Strategies
+                 }
+                 return Actions.MoveDown;
+             }
+-            if (DestinationX > Position.X && CouldntMove < 5)
++            if (destinationX > position.X && CouldntMove < 5)
+                 return Actions.MoveRight;
+-            if (DestinationX < Position.X && CouldntMove < 5)
++            if (destinationX < position.X && CouldntMove < 5)
+                 return Actions.MoveLeft;
+-            return RandomAction(Position);
++            return RandomAction(position);
+         }
+ 
+-        public Actions RandomAction(ITile Position)
++        public Actions RandomAction(ITile position)
+         {
+             Random rand = new Random();
+             switch (rand.Next(4))
+diff --git a/GameLibrary/Strategies/SuperiorStrategy.cs b/GameLibrary/Strategies/SuperiorStrategy.cs
+index bf621db..a17d60d 100644
+--- a/GameLibrary/Strategies/SuperiorStrategy.cs
++++ b/GameLibrary/Strategies/SuperiorStrategy.cs
+@@ -18,17 +18,17 @@ namespace GameLibrary.Strategies
+ 
+         public SuperiorStrategy(Team team, int mapHeight, int mapWidth, int mapGoalAreaHeight, int[] agentsIdFromTeam, int leaderId) : base(team, mapHeight, mapWidth, mapGoalAreaHeight, agentsIdFromTeam, leaderId) { }
+ 
+-        public override Actions UseStrategy(ITile Position, int DistanceToPiece)
++        public override Actions UseStrategy(ITile position, int distanceToPiece)
+         {
+             if (Piece == PieceStatus.Unidentified)
+                 return Actions.TestPiece;
+             else if (Piece == PieceStatus.Sham)
+                 return Actions.DestroyPiece;
+-            else if (Piece == PieceStatus.None && DistanceToPiece == 0)
++            else if (Piece == PieceStatus.None && distanceToPiece == 0)
+                 return Actions.PickPiece;
+             else if (Piece == PieceStatus.None && GoingHome)
+             {
+-                if (Position.X == HomeX && Position.Y == HomeY)
++                if (position.X == HomeX && position.Y == HomeY)
+                 {
+                     GoingHome = false;
+                     return Actions.Discovery;
+@@ -39,21 +39,21 @@ namespace GameLibrary.Strategies
+                     return Actions.InfoExchange;
+                 }
+                 if (CouldntMove < 5)
+-                    return GoToDestination(Position, HomeX, HomeY);
++                    return GoToDestination(position, HomeX, HomeY);
+             }
+             else if (Piece == PieceStatus.None && !GoingHome && CouldntMove < 5)
+                 return Actions.Discovery;
+-            else if (Piece == PieceStatus.Real && Position.X == GoingToX && Position.Y == GoingToY)
++            else if (Piece == PieceStatus.Real && position.X == GoingToX && position.Y == GoingToY)
+             {
+                 GoingToX = GoingToY = -1;
+                 GoingHome = true;
+                 return Actions.PutPiece;
+             }
+             else if (Piece == PieceStatus.Real)
+-                return GoToDestination(Position, GoingToX, GoingToY);
++                return GoToDestination(position, GoingToX, GoingToY);
+             else if (DonePutPieceActions > 3 && !WaitingForExchangeAnswer)
+                 return Actions.InfoExchange;
+-            return RandomAction(Position);
++            return RandomAction(position);
+         }
+     }
+ }
+diff --git a/GameLibrary/Strategies/TotallyRandomStrategy.cs b/GameLibrary/Strategies/TotallyRandomStrategy.cs
+index 3a3a23e..75f98a8 100644
+--- a/GameLibrary/Strategies/TotallyRandomStrategy.cs
++++ b/GameLibrary/Strategies/TotallyRandomStrategy.cs
+@@ -8,7 +8,7 @@ namespace GameLibrary.Strategies
+     {
+         public TotallyRandomStrategy(Team team, int mapHeight, int mapWidth, int mapGoalAreaHeight, int[] agentsIdFromTeam, int leaderId) : base(team, mapHeight, mapWidth, mapGoalAreaHeight, agentsIdFromTeam, leaderId) { }
+ 
+-        public override Actions UseStrategy(ITile Position, int DistanceToPiece)
++        public override Actions UseStrategy(ITile position, int distanceToPiece)
+         {
+             Random rand = new Random();
+             switch(rand.Next(10))
+diff --git a/GameLibrary/StrategyBase.cs b/GameLibrary/StrategyBase.cs
+index 6594097..2471573 100644
+--- a/GameLibrary/StrategyBase.cs
++++ b/GameLibrary/StrategyBase.cs
+@@ -55,7 +55,7 @@ namespace GameLibrary
+             WaitingForExchangeAnswer = false;
+         }
+ 
+-        public abstract Actions UseStrategy(ITile Position, int DistanceToPiece);
++        public abstract Actions UseStrategy(ITile position, int distanceToPiece);
+ 
+         public virtual int ExchangeInfoTarget()
+         {
+diff --git a/GameLibrary/WatsonTcp/Message/WatsonMessage.cs b/GameLibrary/WatsonTcp/Message/WatsonMessage.cs
+index a1fcb7d..22cf046 100644
+--- a/GameLibrary/WatsonTcp/Message/WatsonMessage.cs
++++ b/GameLibrary/WatsonTcp/Message/WatsonMessage.cs
+@@ -32,17 +32,8 @@ namespace WatsonTcp.Message
+ 
+         #endregion
+ 
+-        #region Private-Members
+-
+         private bool _Debug = false;
+-
+-        //                                123456789012345678901234567890
+-        private string _DateTimeFormat = "MMddyyyyTHHmmssffffffz"; // 22 bytes
+-
+         private NetworkStream _NetworkStream;
+-        private int _ReadStreamBuffer = 65536;
+-
+-        #endregion
+ 
+         #region Constructors-and-Factories
+ 
+diff --git a/Player/Agent.cs b/Player/Agent.cs
+index 7731dde..77bda4e 100644
+--- a/Player/Agent.cs
++++ b/Player/Agent.cs
+@@ -717,7 +717,7 @@ namespace Player
+                     bestMoves.Add(Direction.Left);
+                     bestDistance = Map[Tile.X - 1, Tile.Y].DistanceToPiece;
+                 }
+-                if (Tile.Y + 1 < Map.Width && Map[Tile.X, Tile.Y + 1].DistanceToPiece <= bestDistance)
++                if (Tile.Y + 1 < Map.Height - Map.GoalAreaHeight && Map[Tile.X, Tile.Y + 1].DistanceToPiece <= bestDistance)
+                 {
+                     if (Map[Tile.X, Tile.Y + 1].DistanceToPiece < bestDistance)
+                     {
+@@ -726,7 +726,7 @@ namespace Player
+                     bestMoves.Add(Direction.Up);
+                     bestDistance = Map[Tile.X, Tile.Y + 1].DistanceToPiece;
+                 }
+-                if (Tile.Y - 1 >= 0 && Map[Tile.X, Tile.Y - 1].DistanceToPiece <= bestDistance)
++                if (Tile.Y - 1 >= Map.GoalAreaHeight && Map[Tile.X, Tile.Y - 1].DistanceToPiece <= bestDistance)
+                 {
+                     if (Map[Tile.X, Tile.Y - 1].DistanceToPiece < bestDistance)
+                     {
+diff --git a/PlayerLauncher/playerLauncher.bat b/PlayerLauncher/playerLauncher.bat
+index 89b4457..1724570 100644
+--- a/PlayerLauncher/playerLauncher.bat
++++ b/PlayerLauncher/playerLauncher.bat
+@@ -10,4 +10,6 @@ FOR /L %%A IN (1, 1, 10) DO (
+ 	sleep 1
+ )
+ 
+-REM "USAGE: .\PlayerLauncher.exe GUI team strategy isLoggingEnabled [server IP] [server port]"
+\ No newline at end of file
++REM "USAGE: .\PlayerLauncher.exe GUI team strategy isLoggingEnabled [server IP] [server port]"
++
++REM Strategies: Normal, Random, Discoverer, Exchange, Superior
+\ No newline at end of file

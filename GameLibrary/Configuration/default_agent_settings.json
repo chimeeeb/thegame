@@ -1,0 +1,8 @@
+﻿{
+  "WantBeALeader": "false",
+  "Team": "Blue",
+  "ServerIp": "127.0.0.1",
+  "ServerPort": "7654",
+  "Strategy": "Normal",
+  "IsLoggingEnabled": "true"
+}

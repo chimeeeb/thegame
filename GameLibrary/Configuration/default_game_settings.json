@@ -1,0 +1,21 @@
+﻿{
+  "NumberOfPlayers": "20",
+  "NumberOfGoalsPerTeam": "10",
+  "PieceGenerationInterval": "1000",
+  "WaitBase": "100",
+  "WaitMove": "1",
+  "WaitPickPiece": "1",
+  "WaitTestPiece": "2",
+  "WaitPutPiece": "2",
+  "WaitDestroyPiece": "0",
+  "WaitDiscovery": "4",
+  "WaitInfoExchange": "15",
+  "NumberOfPieces": "10",
+  "MapWidth": "10",
+  "MapHeight": "10",
+  "GoalAreaHeight": "3",
+  "ProbabilityOfBadPiece": "0.2",
+  "ServerIp": "127.0.0.1",
+  "ServerPort": "7654",
+  "IsLoggingEnabled": "true"
+}
